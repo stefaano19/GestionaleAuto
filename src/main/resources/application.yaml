@@ -1,0 +1,28 @@
+keycloack:
+  realm: realm
+  auth-server-url: http://localhost:9009/realms
+  resource: ecommerce
+  public-client: true
+  bearer-only: true
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwt-set-uri: http://localhost:9009/realms/Realm/protocol/openid-connect/certs
+          issuer-uri: http://localhost:9009/realms/Realm
+  application:
+    name: GestionaleAuto
+  datasource:
+    password: 'Stefanobru01.'
+    driver-class-name: org.postgresql.Driver
+    username: 'postgres'
+    url: jdbc:postgresql://localhost:5432/gestionaleAuto
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
