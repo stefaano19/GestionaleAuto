@@ -10,13 +10,11 @@ import java.util.List;
 public interface CasaProduttriceRepository extends JpaRepository<CasaProduttrice,Integer> {
     List<CasaProduttrice> findAll();
 
-    CasaProduttrice updateCasaProduttriceByRagioneSocialeContaining(String casaProduttrice);
+    List<CasaProduttrice> findAllByRagioneSocialeContainingOrderByRagioneSocialeAsc(String casaProduttrice);
 
-    List<CasaProduttrice> findAllByRagioneSocialeOrderByRagioneSocialeAsc();
+    List<CasaProduttrice> findAllBySedeContainingOrderBySedeAscRagioneSocialeAsc(String sede);
 
-    List<CasaProduttrice> findAllBySedeOrderBySedeAscRagioneSocialeAsc();
-
-    List<CasaProduttrice> findAllByPartitaIvaOrderByPartitaIvaRagioneSociale();
+    List<CasaProduttrice> findAllByPartitaIvaContainingOrderByPartitaIvaAsc(String partitaIva);
 
     CasaProduttrice findByRagioneSocialeContainingIgnoreCase(String ragioneSociale);
     CasaProduttrice findByPartitaIvaContainingIgnoreCase(String partitaIva);

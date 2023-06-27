@@ -12,7 +12,7 @@ public class CasaProduttrice {
 
     @Basic
     @Column(name="Partita Iva", nullable = false, length = 11 )
-    private String PartitaIva;
+    private String partitaIva;
 
     @Basic
     @Column(name="ragioneSociale", nullable = false)

@@ -2,8 +2,9 @@ package com.example.gestionaleauto.Services;
 
 import com.example.gestionaleauto.Entities.Auto;
 import com.example.gestionaleauto.Repositories.AutoRepository;
+import com.example.gestionaleauto.Util.Exception.AutoEsistenteException;
 import com.example.gestionaleauto.Util.Exception.AutoNonEsistenteException;
-import com.example.gestionaleauto.Util.Exception.ProdottoEsistenteException;
+import com.example.gestionaleauto.Util.TipologiaAuto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,6 +19,10 @@ public class GestioneAuto {
     @Autowired
     private AutoRepository autoRepository;
     private EntityManager entityManager;
+    final double PREZZO_MAX=1000000000;
+    final String SPAZIO="";
+    final int QUANTITA_MAX=200;
+    final int QUANTITA_MIN=1;
 
     @Transactional(readOnly = true)
     public List<Auto> mostraAutoDaAcquistare(){
@@ -26,33 +31,35 @@ public class GestioneAuto {
 
     @Transactional(readOnly = true)
     public List<Auto> mostraAuto() {
-        return autoRepository.findAllByModelloOrderByModelloAsc();
+        return autoRepository.findAllByModelloContainingOrderByModelloAsc(SPAZIO);
     }
 
     @Transactional(readOnly = true)
-    public List<Auto> mostraAutoPerTipologia(){
-        return autoRepository.findAllByTipologiaOrderByTipologiaAscModelloAsc();
+    public List<Auto> mostraAutoPerTipologia(TipologiaAuto tipologiaAuto){
+        return autoRepository.findAllByTipologiaAutoIsOrderByTipologiaAutoAscModelloAsc(tipologiaAuto);
     }
 
     @Transactional(readOnly = true)
     public List<Auto> mostraAutoPerPrezzo(){
-        return autoRepository.findAllByPrezzoOrderByPrezzoAscModelloAsc();
+        return autoRepository.findAllByPrezzoIsLessThanOrderByPrezzoAscModelloAsc(PREZZO_MAX);
     }
     @Transactional(readOnly = true)
     public List<Auto> mostraAutoPerDisponibilità(){
-        return autoRepository.findAllByDisponibilitàOrderByDisponibilitàAscModelloAsc();
+
+        return autoRepository.findAllByQuantitàIsLessThanOrderByQuantitàAsc(QUANTITA_MAX);
     }
     @Transactional(readOnly = false)
     public List<Auto> mostraAutoDaAcquistarePerModello(){
-        return autoRepository.findAllByQuantitàIsLessThanOrderByModelloAsc(1);
+        return autoRepository.findAllByQuantitàIsLessThanOrderByModelloAsc(QUANTITA_MIN);
     }
 
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public Auto creaAuto(Auto auto) throws ProdottoEsistenteException {
+    public Auto creaAuto(Auto auto) throws AutoEsistenteException {
         if(auto.getId()!=-1 && autoRepository.existsById(auto.getId())) {
-            throw new ProdottoEsistenteException();
+            throw new AutoEsistenteException();
         }
+        auto.setModello(auto.getModello()+SPAZIO);
         return autoRepository.save(auto);
     }
 

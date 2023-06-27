@@ -1,9 +1,11 @@
 package com.example.gestionaleauto.Services;
 
+import com.example.gestionaleauto.Entities.Auto;
 import com.example.gestionaleauto.Entities.Prodotto;
 import com.example.gestionaleauto.Repositories.ProdottoRepository;
 import com.example.gestionaleauto.Util.Exception.ProdottoEsistenteException;
 import com.example.gestionaleauto.Util.Exception.ProdottoNonEsistenteException;
+import com.example.gestionaleauto.Util.TipologiaProdotto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,31 +23,37 @@ public class GestioneProdotto {
 
     private EntityManager entityManager;
 
+    final double PREZZO_MAX=1000000000;
+    final String SPAZIO="";
+    final int DISPONIBILITA_MAX=200;
+    final int DISPONIBILITA_MIN=1;
+
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public Prodotto creaProdotto(Prodotto prodotto) throws ProdottoEsistenteException {
         if(prodotto.getId()!=-1 && prodottoRepository.existsById(prodotto.getId())) {
             throw new ProdottoEsistenteException();
         }
+        prodotto.setNome(prodotto.getNome()+SPAZIO);
         return prodottoRepository.save(prodotto);
     }
 
     @Transactional(readOnly = true)
     public List<Prodotto> mostraProdotti() {
-        return prodottoRepository.findAllByNomeOrderByNomeAscNomeAsc();
+        return prodottoRepository.findAllByNomeContainingOrderByNomeAscNomeAsc(SPAZIO);
     }
 
     @Transactional(readOnly = true)
-    public List<Prodotto> mostraProdottiPerTipologia(){
-        return prodottoRepository.findAllByTipologiaOrderByTipologiaAscNomeAsc();
+    public List<Prodotto> mostraProdottiPerTipologia(TipologiaProdotto tipologiaProdotto){
+        return prodottoRepository.findAllByTipologiaIsOrderByTipologiaAscNomeAsc(tipologiaProdotto);
     }
 
     @Transactional(readOnly = true)
     public List<Prodotto> mostraProdottiPerPrezzo(){
-        return prodottoRepository.findAllByPrezzoOrderByPrezzoAscNomeAsc();
+        return prodottoRepository.findAllByPrezzoIsLessThanOrderByPrezzoAscNomeAsc(PREZZO_MAX);
     }
     @Transactional(readOnly = true)
     public List<Prodotto> mostraProdottiPerDisponibilità(){
-        return prodottoRepository.findAllByDisponibilitàOrderByDisponibilitàAscNomeAsc();
+        return prodottoRepository.findAllByDisponibilitàIsLessThanOrderByDisponibilitàAscNomeAsc(DISPONIBILITA_MAX);
     }
 
 
@@ -82,6 +90,15 @@ public class GestioneProdotto {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public boolean cancellaProdotto(Prodotto prodotto){
         return cancellaProdotto(prodotto.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Prodotto> mostraProdottiManutenzione(){
+        return prodottoRepository.findAllByTipologiaIs(TipologiaProdotto.MANUTENZIONE);
+    }
+    @Transactional(readOnly = false)
+    public List<Prodotto> mostraProdottiDaOrdinare() {
+        return prodottoRepository.findAllByDisponibilitàIsLessThanOrderByDisponibilitàAscNomeAsc(DISPONIBILITA_MIN);
     }
 
 }

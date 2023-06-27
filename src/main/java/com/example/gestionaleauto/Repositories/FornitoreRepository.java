@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository
 public interface FornitoreRepository extends JpaRepository<Fornitore, Integer> {
-    List<Fornitore> findAllByRagioneSocialeOrderByRagioneSocialeAsc();
-    List<Fornitore> findAllBySedeOrderBySedeAscRagioneSocialeAsc();
-    List<Fornitore> findAllByPartitaIvaOrderByPartitaIvaRagioneSociale();
+    List<Fornitore> findAllByRagioneSocialeContainingOrderByRagioneSocialeAsc(String ragioneSociale);
+    List<Fornitore> findAllBySedeContainingOrderBySedeAscRagioneSocialeAsc(String sede);
+    List<Fornitore> findAllByPartitaIvaContainingOrderByPartitaIvaAsc(String partitaIva);
     Fornitore findByRagioneSocialeContainingIgnoreCase(String ragioneSociale);
 
 

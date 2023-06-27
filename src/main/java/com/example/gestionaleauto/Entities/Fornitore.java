@@ -11,8 +11,8 @@ public class Fornitore {
     private int id;
 
     @Basic
-    @Column(name="Partita Iva", nullable = false, length = 11 )
-    private String PartitaIva;
+    @Column(name="partitaIva", nullable = false, length = 11 )
+    private String partitaIva;
 
     @Basic
     @Column(name="ragioneSociale", nullable = false)

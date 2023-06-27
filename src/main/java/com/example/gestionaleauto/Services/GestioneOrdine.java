@@ -2,6 +2,7 @@ package com.example.gestionaleauto.Services;
 
 import com.example.gestionaleauto.Entities.*;
 import com.example.gestionaleauto.Repositories.*;
+import com.example.gestionaleauto.Util.Pagamento;
 import com.example.gestionaleauto.Util.Stato;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class GestioneOrdine {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public OrdineVendita ordinePreventivo(Preventivo preventivo) throws IllegalAccessException{
+    public OrdineVendita ordineDaPreventivo(Preventivo preventivo) throws IllegalAccessException{
         if(preventivo.getId()!=-1 && preventivoRepository.existsById(preventivo.getId())){
             throw new IllegalAccessException();
         }
@@ -79,6 +80,9 @@ public class GestioneOrdine {
         if(autoRepository.existsById(auto.getId())) {
             auto=autoRepository.findById(preventivo.getAuto().getId()).get();
             auto.setQuantità(auto.getQuantità()-1);
+            Collection<OrdineVendita> ordiniVendita=auto.getOrdiniVendita();
+            ordiniVendita.add(ordineVendita);
+            auto.setOrdiniVendita(ordiniVendita);
             autoRepository.save(auto);
             entityManager.refresh(auto);
             List<Auto> a = new ArrayList<>();
@@ -128,10 +132,69 @@ public class GestioneOrdine {
         return ordineAcquisto;
     }
 
+    @Transactional(readOnly = true)
+    public List<OrdineAcquisto> ordiniNonConformi(){
+        return ordineAcquistoRepository.findAllByConformeIsFalse();
+    }
 
+    @Transactional(readOnly = false)
+    public OrdineAcquisto aggiornaOrdine(OrdineAcquisto ordineAcquisto, boolean conforme){
+        ordineAcquisto.setConforme(conforme);
+        ordineAcquistoRepository.save(ordineAcquisto);
+        entityManager.refresh(ordineAcquisto);
+        return ordineAcquisto;
+    }
 
+    @Transactional(readOnly = true)
+    public List<PraticheVendita> mostraPraticheVendita(){
+        return praticheVenditaRepository.findAll();
+    }
 
+    @Transactional(readOnly = true)
+    public List<PraticheVendita> mostraPraticheVenditaPerPagamentoRate(Pagamento pagamento){
+        return praticheVenditaRepository.findAllByPagamento(Pagamento.PAGAMENTO_A_RATE);
+    }
 
-
+    @Transactional(readOnly = true)
+    public List<PraticheVendita> mostraPraticheVenditaPerPagamentoContanti(Pagamento pagamento){
+        return praticheVenditaRepository.findAllByPagamento(Pagamento.CONTANTI);
+    }
+    @Transactional(readOnly = true)
+    public List<PraticheVendita> mostraPraticheVenditaPerPagamentoAssegno(Pagamento pagamento){
+        return praticheVenditaRepository.findAllByPagamento(Pagamento.ASSEGNO);
+    }
+    @Transactional(readOnly = true)
+    public List<PraticheVendita> mostraPraticheVenditaPerPagamentoBonifico(Pagamento pagamento){
+        return praticheVenditaRepository.findAllByPagamento(Pagamento.BONIFICO);
+    }
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    public OrdineVendita ordineAuto(Cliente cliente, List<Auto> auto) throws IllegalAccessException {
+        OrdineVendita ordineVendita = new OrdineVendita();
+        ordineVendita.setDataOrdine(new Date(System.currentTimeMillis()));
+        double importo = 0;
+        for (Auto a : auto) {
+            importo += a.getPrezzo();
+        }
+        ordineVendita.setImporto(importo);
+        ordineVendita.setConsegnaAdomicilio(true);
+        ordineVendita.setCliente(cliente);
+        for (Auto a : auto) {
+            if (autoRepository.existsById(a.getId())) {
+                Auto a1 = autoRepository.findById(a.getId()).get();
+                a1.setQuantità(a1.getQuantità() - 1);
+                Collection<OrdineVendita> ordiniVendita=a1.getOrdiniVendita();
+                ordiniVendita.add(ordineVendita);
+                a1.setOrdiniVendita(ordiniVendita);
+                autoRepository.save(a1);
+                entityManager.refresh(a);
+                List<Auto> list = new ArrayList<>();
+                list.add(a);
+                ordineVendita.setAuto(list);
+                ordineVenditaRepository.save(ordineVendita);
+                entityManager.refresh(ordineVendita);
+            }
+        }
+        return ordineVendita;
+    }
 
 }

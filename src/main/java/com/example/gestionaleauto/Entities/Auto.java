@@ -46,6 +46,10 @@ public class Auto {
     @JoinTable(name="ORDINA", joinColumns = {@JoinColumn(name = "AUTO_ID")}, inverseJoinColumns = {@JoinColumn(name = "ORDINEACQUISTO_ID")})
     private Collection<OrdineAcquisto> ordiniAcquisto;
 
+    @ManyToMany
+    @JoinTable(name="UTILIZZA", joinColumns = {@JoinColumn(name = "AUTO_ID")}, inverseJoinColumns = {@JoinColumn(name = "APPUNTAMENTO_ID")})
+    private Collection<Appuntamento> appuntamenti;
+
     @Version
     private long version;
 }

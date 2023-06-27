@@ -22,12 +22,17 @@ public class GestioneCasaProduttrice {
     @Autowired
     private AutoRepository autoRepository;
     private EntityManager entityManager;
+    final double PREZZO_MAX=1000000000;
+    final String SPAZIO="";
+    final int QUANTITA_MAX=200;
+    final int QUANTITA_MIN=1;
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public CasaProduttrice creaCasaProduttrice(CasaProduttrice casaProduttrice) throws CasaProduttriceEsistenteException {
         if(casaProduttrice.getId()!=-1 && casaProduttriceRepository.existsById(casaProduttrice.getId())) {
             throw new CasaProduttriceEsistenteException();
         }
+        casaProduttrice.setRagioneSociale(casaProduttrice.getRagioneSociale()+SPAZIO);
         return casaProduttriceRepository.save(casaProduttrice);
     }
 
@@ -49,17 +54,17 @@ public class GestioneCasaProduttrice {
 
     @Transactional(readOnly = true)
     public List<CasaProduttrice> mostraCasaProduttrice() {
-        return casaProduttriceRepository.findAllByRagioneSocialeOrderByRagioneSocialeAsc();
+        return casaProduttriceRepository.findAllByRagioneSocialeContainingOrderByRagioneSocialeAsc(SPAZIO);
     }
 
     @Transactional(readOnly = true)
-    public List<CasaProduttrice> mostraCasaProduttricePerSede(){
-        return casaProduttriceRepository.findAllBySedeOrderBySedeAscRagioneSocialeAsc();
+    public List<CasaProduttrice> mostraCasaProduttricePerSede(String sede){
+        return casaProduttriceRepository.findAllBySedeContainingOrderBySedeAscRagioneSocialeAsc(sede);
     }
 
     @Transactional(readOnly = true)
-    public List<CasaProduttrice> mostraCasaProduttricePerPartitaIva(){
-        return casaProduttriceRepository.findAllByPartitaIvaOrderByPartitaIvaRagioneSociale();
+    public List<CasaProduttrice> mostraCasaProduttricePerPartitaIva(String partitaIva){
+        return casaProduttriceRepository.findAllByPartitaIvaContainingOrderByPartitaIvaAsc(partitaIva);
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -99,7 +104,7 @@ public class GestioneCasaProduttrice {
 
     public List<Auto> autoCasaProduttrice(CasaProduttrice casaProduttrice){
         if(casaProduttriceRepository.existsById(casaProduttrice.getId())){
-            return autoRepository.findAllByCasaProduttice_Id(casaProduttrice.getId());
+            return autoRepository.findAllByCasaProduttrice_Id(casaProduttrice.getId());
         }
         return new ArrayList();
     }

@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface AddettoTrasportoRepository extends JpaRepository<AddettoTrasporto, Integer> {
-    AddettoTrasporto findByNome(String nome);
-    List<AddettoTrasporto> findALL();
+    AddettoTrasporto findByRagioneSocialeContaining(String ragioneSociale);
+    List<AddettoTrasporto> findAll();
 }

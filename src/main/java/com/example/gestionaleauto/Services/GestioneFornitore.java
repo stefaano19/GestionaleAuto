@@ -1,5 +1,6 @@
 package com.example.gestionaleauto.Services;
 
+import com.example.gestionaleauto.Entities.Auto;
 import com.example.gestionaleauto.Entities.Fornitore;
 import com.example.gestionaleauto.Entities.Prodotto;
 import com.example.gestionaleauto.Repositories.FornitoreRepository;
@@ -24,11 +25,14 @@ public class GestioneFornitore {
     @Autowired
     private ProdottoRepository prodottoRepository;
 
+    final String SPAZIO="";
+
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public Fornitore creaFornitore(Fornitore fornitore) throws FornitoreEsistenteException {
         if(fornitore.getId()!=-1 && fornitoreRepository.existsById(fornitore.getId())) {
             throw new FornitoreEsistenteException();
         }
+        fornitore.setRagioneSociale(fornitore.getRagioneSociale()+SPAZIO);
         return fornitoreRepository.save(fornitore);
     }
 
@@ -48,17 +52,17 @@ public class GestioneFornitore {
 
     @Transactional(readOnly = true)
     public List<Fornitore> mostraFornitori() {
-        return fornitoreRepository.findAllByRagioneSocialeOrderByRagioneSocialeAsc();
+        return fornitoreRepository.findAllByRagioneSocialeContainingOrderByRagioneSocialeAsc(SPAZIO);
     }
 
     @Transactional(readOnly = true)
-    public List<Fornitore> mostraFornitoriPerSede(){
-        return fornitoreRepository.findAllBySedeOrderBySedeAscRagioneSocialeAsc();
+    public List<Fornitore> mostraFornitoriPerSede(String sede){
+        return fornitoreRepository.findAllBySedeContainingOrderBySedeAscRagioneSocialeAsc(sede);
     }
 
     @Transactional(readOnly = true)
-    public List<Fornitore> mostraFornitoriPerPartitaIva(){
-        return fornitoreRepository.findAllByPartitaIvaOrderByPartitaIvaRagioneSociale();
+    public List<Fornitore> mostraFornitoriPerPartitaIva(String partitaIva){
+        return fornitoreRepository.findAllByPartitaIvaContainingOrderByPartitaIvaAsc(partitaIva);
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
