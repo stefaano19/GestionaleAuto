@@ -46,7 +46,7 @@ public class GestioneOrdine {
         for(Auto a: auto){
             Optional<Auto> acquistata = autoRepository.findById(a.getId());
             if(acquistata.isEmpty()){
-                acquistata.get().setQuantità(acquistata.get().getQuantità()+ a.getQuantità());
+                acquistata.get().setQuantita(acquistata.get().getQuantita()+ a.getQuantita());
                 ordineAcquisto.setImporto(ordineAcquisto.getImporto()+acquistata.get().getPrezzo());
                 acquistate.add(a);
             }else{
@@ -79,7 +79,7 @@ public class GestioneOrdine {
         Auto auto= preventivo.getAuto();
         if(autoRepository.existsById(auto.getId())) {
             auto=autoRepository.findById(preventivo.getAuto().getId()).get();
-            auto.setQuantità(auto.getQuantità()-1);
+            auto.setQuantita(auto.getQuantita()-1);
             Collection<OrdineVendita> ordiniVendita=auto.getOrdiniVendita();
             ordiniVendita.add(ordineVendita);
             auto.setOrdiniVendita(ordiniVendita);
@@ -181,7 +181,7 @@ public class GestioneOrdine {
         for (Auto a : auto) {
             if (autoRepository.existsById(a.getId())) {
                 Auto a1 = autoRepository.findById(a.getId()).get();
-                a1.setQuantità(a1.getQuantità() - 1);
+                a1.setQuantita(a1.getQuantita() - 1);
                 Collection<OrdineVendita> ordiniVendita=a1.getOrdiniVendita();
                 ordiniVendita.add(ordineVendita);
                 a1.setOrdiniVendita(ordiniVendita);

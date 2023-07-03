@@ -11,7 +11,7 @@ public class Fornitore {
     private int id;
 
     @Basic
-    @Column(name="partitaIva", nullable = false, length = 11 )
+    @Column(length = 11)
     private String partitaIva;
 
     @Basic

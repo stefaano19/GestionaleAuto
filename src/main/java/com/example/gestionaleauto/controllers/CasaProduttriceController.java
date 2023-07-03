@@ -7,27 +7,34 @@ import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/CaseProduttrici")
+@RequestMapping("/caseProduttrici")
 public class CasaProduttriceController {
     @Autowired
     private GestioneCasaProduttrice gestioneCasaProduttrice;
 
     @GetMapping
-    public ResponseEntity mostraCaseProduttrici(){
-        return new ResponseEntity(gestioneCasaProduttrice.mostraCasaProduttrice(), HttpStatus.OK);
+
+    public List<CasaProduttrice> mostraCaseProduttrici(){
+        return gestioneCasaProduttrice.mostraCasaProduttrice();
     }
     @GetMapping("/mostraCaseProduttriciPerSede")
+
     public ResponseEntity mostraCaseProduttriciPerSede(@RequestBody @Valid String sede){
         return new ResponseEntity(gestioneCasaProduttrice.mostraCasaProduttricePerSede(sede), HttpStatus.OK);
     }
     @GetMapping("/mostraCaseProdutticiPerPartitaIva")
+
     public ResponseEntity mostraCaseProduttriciPerPartitaIva(@RequestBody @Valid String partitaIva){
         return new ResponseEntity(gestioneCasaProduttrice.mostraCasaProduttricePerPartitaIva(partitaIva), HttpStatus.OK);
     }
     @PostMapping("/creaCasaProduttrice")
+
     public ResponseEntity creaCasaProduttrice(@RequestBody @Valid CasaProduttrice casaProduttrice){
         try{
             gestioneCasaProduttrice.creaCasaProduttrice(casaProduttrice);
@@ -47,6 +54,7 @@ public class CasaProduttriceController {
         return new ResponseEntity<>(new ResponseMessage("AGGIORNATA"), HttpStatus.OK);
     }
     @PostMapping("/cancellaCasaProduttrice")
+
     public ResponseEntity cancellaCasaProduttrice(@RequestBody @Valid CasaProduttrice casaProduttrice){
         gestioneCasaProduttrice.cancellaCasaProduttrice(casaProduttrice);
         return new ResponseEntity<>(new ResponseMessage("CANCELLATA"), HttpStatus.OK);

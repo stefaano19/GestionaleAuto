@@ -7,7 +7,10 @@ import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/fornitori")
@@ -16,8 +19,8 @@ public class FornitoreController {
     private GestioneFornitore gestioneFornitore;
 
     @GetMapping
-    public ResponseEntity mostraFornitori(){
-        return new ResponseEntity(gestioneFornitore.mostraFornitori(), HttpStatus.OK);
+    public List<Fornitore> mostraFornitori(){
+        return gestioneFornitore.mostraFornitori();
     }
     @GetMapping("/mostraFornitoriPerSede")
     public ResponseEntity mostraFornitoriPerSede(@RequestBody @Valid String sede){
@@ -38,6 +41,7 @@ public class FornitoreController {
     }
 
     @PostMapping("/aggiornaFornitore")
+
     public ResponseEntity aggiornaFornitore(@RequestBody @Valid String ragioneSociale, @RequestBody @Valid String partitaIva){
         try{
             gestioneFornitore.aggiornaFornitore(ragioneSociale,partitaIva);
@@ -47,6 +51,7 @@ public class FornitoreController {
         return new ResponseEntity<>(new ResponseMessage("AGGIORNATO"), HttpStatus.OK);
     }
     @PostMapping("/cancellaFornitore")
+
     public ResponseEntity cancellaFornitore(@RequestBody @Valid Fornitore fornitore){
         gestioneFornitore.cancellaFornitore(fornitore);
         return new ResponseEntity<>(new ResponseMessage("CANCELLATO"), HttpStatus.OK);

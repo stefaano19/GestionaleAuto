@@ -8,7 +8,10 @@ import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auto")
@@ -16,8 +19,8 @@ public class AutoController{
     @Autowired
     private GestioneAuto gestioneAuto;
     @GetMapping
-    public ResponseEntity mostraAuto(){
-        return new ResponseEntity(gestioneAuto.mostraAuto(), HttpStatus.OK);
+    public List<Auto> mostraAuto(){
+        return gestioneAuto.mostraAuto();
     }
     @GetMapping("/mostraAutoPerTipologia")
     public ResponseEntity mostraAutoPerTipologia(@RequestBody @Valid TipologiaAuto tipologiaAuto){

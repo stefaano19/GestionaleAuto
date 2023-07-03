@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface AppuntamentoRepository extends JpaRepository<Appuntamento, Integer> {
     List<Appuntamento> findAllByDataEqualsAndTestDriveIsTrue(Date date);
+    Boolean existsByData(Date date);
 }

@@ -2,11 +2,15 @@ package com.example.gestionaleauto.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
 
 @Entity
 @Data
+@DynamicInsert
+@DynamicUpdate
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

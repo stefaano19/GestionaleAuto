@@ -51,7 +51,7 @@ public class GestioneFornitore {
 
     @Transactional(readOnly = true)
     public List<Fornitore> mostraFornitori() {
-        return fornitoreRepository.findAllByRagioneSocialeContainingOrderByRagioneSocialeAsc(SPAZIO);
+        return fornitoreRepository.findAll();
     }
 
     @Transactional(readOnly = true)

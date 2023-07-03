@@ -26,7 +26,7 @@ public class GestioneAuto {
 
     @Transactional(readOnly = true)
     public List<Auto> mostraAutoDaAcquistare(){
-        return autoRepository.findAllByQuantitàIsLessThanOrderByTipologiaAutoAsc(1);
+        return autoRepository.findAllByQuantitaIsLessThanOrderByTipologiaAutoAsc(1);
     }
 
     @Transactional(readOnly = true)
@@ -46,11 +46,11 @@ public class GestioneAuto {
     @Transactional(readOnly = true)
     public List<Auto> mostraAutoPerDisponibilità(){
 
-        return autoRepository.findAllByQuantitàIsLessThanOrderByQuantitàAsc(QUANTITA_MAX);
+        return autoRepository.findAllByQuantitaIsLessThanOrderByQuantitaAsc(QUANTITA_MAX);
     }
     @Transactional(readOnly = false)
     public List<Auto> mostraAutoDaAcquistarePerModello(){
-        return autoRepository.findAllByQuantitàIsLessThanOrderByModelloAsc(QUANTITA_MIN);
+        return autoRepository.findAllByQuantitaIsLessThanOrderByModelloAsc(QUANTITA_MIN);
     }
 
 

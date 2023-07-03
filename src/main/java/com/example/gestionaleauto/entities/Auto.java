@@ -11,7 +11,7 @@ import java.util.Collection;
 public class Auto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private int id;
 
     @Basic
     @Column(name="prezzo", nullable = false)
@@ -31,8 +31,8 @@ public class Auto {
     private TipologiaAuto tipologiaAuto;
 
     @Basic
-    @Column(name="quantità", nullable = false)
-    private int quantità;
+    @Column(name="quantita", nullable = false)
+    private int quantita;
 
     @ManyToOne
     @JoinColumn(name="CASAPRODUTTRICE_ID")

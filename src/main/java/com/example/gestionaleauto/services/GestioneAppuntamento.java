@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,15 +40,17 @@ public class GestioneAppuntamento {
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public Appuntamento creaAppuntamento(Appuntamento appuntamento) throws AppuntamentoEsistenteException {
-        if(appuntamento.getId()!=-1 && appuntamentoRepository.existsById(appuntamento.getId())){
+        if(appuntamento.getId()==-1){
             throw new AppuntamentoEsistenteException();
         }
-        for(Auto a: appuntamento.getAuto()){
-            Collection<Appuntamento> autoAppuntamenti=autoRepository.findById(a.getId()).get().getAppuntamenti();
-            autoAppuntamenti.add(appuntamento);
-            a.setAppuntamenti(autoAppuntamenti);
-            autoRepository.save(a);
-            entityManager.refresh(a);
+        if(appuntamento.getAuto().size()>0) {
+            for (Auto a : appuntamento.getAuto()) {
+                Collection<Appuntamento> autoAppuntamenti = autoRepository.findById(a.getId()).get().getAppuntamenti();
+                autoAppuntamenti.add(appuntamento);
+                a.setAppuntamenti(autoAppuntamenti);
+                autoRepository.save(a);
+                entityManager.refresh(a);
+            }
         }
         appuntamentoRepository.save(appuntamento);
         return appuntamento;

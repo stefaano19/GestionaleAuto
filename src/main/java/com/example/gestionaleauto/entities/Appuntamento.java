@@ -1,5 +1,6 @@
 package com.example.gestionaleauto.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,6 +15,7 @@ public class Appuntamento {
     private int id;
 
     @Basic
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private Date data;
 
     @Basic
@@ -21,4 +23,5 @@ public class Appuntamento {
 
     @ManyToMany(mappedBy ="appuntamenti")
     public Collection<Auto> auto;
+
 }

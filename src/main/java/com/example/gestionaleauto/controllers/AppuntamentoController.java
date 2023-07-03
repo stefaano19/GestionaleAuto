@@ -8,6 +8,7 @@ import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -28,10 +29,11 @@ public class AppuntamentoController {
     public ResponseEntity creaAppuntamento(@RequestBody @Valid Appuntamento appuntamento){
         try{
             gestioneAppuntamento.creaAppuntamento(appuntamento);
-        }catch(Exception e){
+            System.out.println("ok");
+            return new ResponseEntity<>(new ResponseMessage("AGGIUNTO"), HttpStatus.OK);
+        }catch(Exception e) {
             return new ResponseEntity(new ResponseMessage("APPUNTAMENTO ESISTENTE"), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(new ResponseMessage("AGGIUNTO"), HttpStatus.OK);
     }
 
     @PostMapping("/creaAppuntamentoConValori")
@@ -45,8 +47,9 @@ public class AppuntamentoController {
     }
 
     @GetMapping
-    public ResponseEntity appuntamenti(){
-        return new ResponseEntity<>(gestioneAppuntamento.mostraAppuntamenti(), HttpStatus.OK);
+    public List<Appuntamento> appuntamenti(){
+        System.out.println(gestioneAppuntamento.mostraAppuntamenti().toArray());
+        return gestioneAppuntamento.mostraAppuntamenti();
     }
 
     @PostMapping("/rimuoviAppuntamento")

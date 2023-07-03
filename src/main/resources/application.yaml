@@ -1,10 +1,4 @@
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwt-set-uri: http://localhost:9009/realms/Realm/protocol/openid-connect/certs
-          issuer-uri: http://localhost:9009/realms/Realm
   application:
     name: GestionaleAuto
   datasource:
@@ -18,4 +12,3 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-
