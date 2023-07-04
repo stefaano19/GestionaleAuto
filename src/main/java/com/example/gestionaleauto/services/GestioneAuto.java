@@ -1,7 +1,9 @@
 package com.example.gestionaleauto.services;
 
 import com.example.gestionaleauto.entities.Auto;
+import com.example.gestionaleauto.entities.CasaProduttrice;
 import com.example.gestionaleauto.repositories.AutoRepository;
+import com.example.gestionaleauto.repositories.CasaProduttriceRepository;
 import com.example.gestionaleauto.util.exception.AutoEsistenteException;
 import com.example.gestionaleauto.util.exception.AutoNonEsistenteException;
 import com.example.gestionaleauto.util.TipologiaAuto;
@@ -23,6 +25,8 @@ public class GestioneAuto {
     final String SPAZIO="";
     final int QUANTITA_MAX=200;
     final int QUANTITA_MIN=1;
+    @Autowired
+    CasaProduttriceRepository casaProduttriceRepository;
 
     @Transactional(readOnly = true)
     public List<Auto> mostraAutoDaAcquistare(){
@@ -59,7 +63,14 @@ public class GestioneAuto {
         if(auto.getId()!=-1 && autoRepository.existsById(auto.getId())) {
             throw new AutoEsistenteException();
         }
-        auto.setModello(auto.getModello()+SPAZIO);
+        CasaProduttrice c=null;
+        Optional<CasaProduttrice> casaProduttrice=casaProduttriceRepository.findById(auto.getCP_ID());
+        if(casaProduttrice.isPresent()){
+            c=casaProduttrice.get();
+        }
+        auto.setCasaProduttrice(c);
+        System.out.println(auto.getTipologiaAuto());
+        System.out.println(""+auto.toString());
         return autoRepository.save(auto);
     }
 

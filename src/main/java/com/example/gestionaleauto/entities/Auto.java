@@ -1,10 +1,15 @@
 package com.example.gestionaleauto.entities;
 
 import com.example.gestionaleauto.util.TipologiaAuto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeId;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Collection;
+import java.util.Enumeration;
 
 @Entity
 @Data
@@ -28,7 +33,7 @@ public class Auto {
     private Boolean showroom;
 
     @Basic
-    private TipologiaAuto tipologiaAuto;
+    private String tipologiaAuto;
 
     @Basic
     @Column(name="quantita", nullable = false)
@@ -37,6 +42,10 @@ public class Auto {
     @ManyToOne
     @JoinColumn(name="CASAPRODUTTRICE_ID")
     private CasaProduttrice casaProduttrice;
+
+    @JsonDeserialize
+    @Column(name="CP_ID", nullable = true)
+    private int CP_ID;
 
     @ManyToMany
     @JoinTable(name="VENDUTA", joinColumns = {@JoinColumn(name = "AUTO_ID")}, inverseJoinColumns = {@JoinColumn(name = "ORDINEVENDITA_ID")})

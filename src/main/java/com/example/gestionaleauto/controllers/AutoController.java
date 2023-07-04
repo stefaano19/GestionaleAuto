@@ -4,6 +4,7 @@ import com.example.gestionaleauto.entities.Auto;
 import com.example.gestionaleauto.services.GestioneAuto;
 import com.example.gestionaleauto.util.ResponseMessage;
 import com.example.gestionaleauto.util.TipologiaAuto;
+import com.example.gestionaleauto.util.exception.AutoEsistenteException;
 import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,7 +49,7 @@ public class AutoController{
     public ResponseEntity creaAuto(@RequestBody @Valid Auto auto){
         try{
             gestioneAuto.creaAuto(auto);
-        }catch(Exception e){
+        }catch(AutoEsistenteException e){
             return new ResponseEntity(new ResponseMessage("AUTO ESISTENTE"), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(new ResponseMessage("CREATA"), HttpStatus.OK);
