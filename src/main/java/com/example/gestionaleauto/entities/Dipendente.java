@@ -4,6 +4,9 @@ import com.example.gestionaleauto.util.Mansione;
 import jakarta.persistence.*;
 import lombok.Data;
 
+/**
+ *
+ */
 @Entity
 @Data
 public class Dipendente {

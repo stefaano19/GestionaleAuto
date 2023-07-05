@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ *
+ */
 @RestController
 @RequestMapping("/auto")
 public class AutoController{
@@ -31,9 +34,9 @@ public class AutoController{
     public ResponseEntity mostraAutoPerPrezzo(){
         return new ResponseEntity(gestioneAuto.mostraAutoPerPrezzo(), HttpStatus.OK);
     }
-    @GetMapping("/mostraAutoPerDisponibilità")
-    public ResponseEntity mostraAutoPerDisponibilità(){
-        return new ResponseEntity(gestioneAuto.mostraAutoPerDisponibilità(), HttpStatus.OK);
+    @GetMapping("/mostraAutoPerDisponibilita")
+    public ResponseEntity mostraAutoPerDisponibilita(){
+        return new ResponseEntity(gestioneAuto.mostraAutoPerDisponibilita(), HttpStatus.OK);
     }
 
     @GetMapping("/mostraAutoDaAcquistare")
@@ -41,8 +44,8 @@ public class AutoController{
         return new ResponseEntity(gestioneAuto.mostraAutoDaAcquistare(), HttpStatus.OK);
     }
     @GetMapping("/mostraAutoDaAcquistarePerModello")
-    public ResponseEntity mostraAutoDaAcquistarePerModello(){
-        return new ResponseEntity(gestioneAuto.mostraAutoDaAcquistarePerModello(), HttpStatus.OK);
+    public List<Auto> mostraAutoDaAcquistarePerModello(){
+        return gestioneAuto.mostraAutoDaAcquistarePerModello();
     }
 
     @PostMapping("/creaAuto")

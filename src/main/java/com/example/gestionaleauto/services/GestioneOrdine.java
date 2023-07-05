@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+/**
+ *
+ */
 @Service
 public class GestioneOrdine {
     @Autowired
@@ -113,7 +116,7 @@ public class GestioneOrdine {
         for(Prodotto p: prodotto){
             Optional<Prodotto> acquistato = prodottoRepository.findById(p.getId());
             if(acquistato.isEmpty()){
-                acquistato.get().setDisponibilità(acquistato.get().getDisponibilità()+ p.getDisponibilità());
+                acquistato.get().setDisponibilita(acquistato.get().getDisponibilita()+ p.getDisponibilita());
                 ordineAcquisto.setImporto(ordineAcquisto.getImporto()+acquistato.get().getPrezzo());
                 acquistati.add(p);
             }else{

@@ -1,5 +1,8 @@
 package com.example.gestionaleauto.util;
 
+/**
+ *
+ */
 public enum Mansione {
     ADDETTO_ALLE_VENDITE, TITOLARE, SEGRETARIO, ADDETTO_AL_GARAGE, SOCIAL_MEDIA_MANAGER, ADDETTO_ALLA_LOGISTICA, AMMINISTRATORE_DI_SISTEMA
 }

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ *
+ */
 @Repository
 public interface PraticheVenditaRepository extends JpaRepository<PraticheVendita, Integer> {
     PraticheVendita findAllByOrdineVendita(OrdineVendita ordineVendita);

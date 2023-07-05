@@ -3,6 +3,9 @@ package com.example.gestionaleauto.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+/**
+ *
+ */
 @Entity
 @Data
 public class Candidato {

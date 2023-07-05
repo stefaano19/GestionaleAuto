@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ *
+ */
 @Repository
 public interface AddettoTrasportoRepository extends JpaRepository<AddettoTrasporto, Integer> {
     AddettoTrasporto findByRagioneSocialeContaining(String ragioneSociale);

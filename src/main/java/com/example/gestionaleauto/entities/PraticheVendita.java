@@ -5,6 +5,9 @@ import com.example.gestionaleauto.util.Stato;
 import jakarta.persistence.*;
 import lombok.Data;
 
+/**
+ *
+ */
 @Entity
 @Data
 public class PraticheVendita {

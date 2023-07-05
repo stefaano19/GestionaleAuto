@@ -4,6 +4,9 @@ package com.example.gestionaleauto.util;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+/**
+ *
+ */
 public class ResponseMessage {
     private String message;
 

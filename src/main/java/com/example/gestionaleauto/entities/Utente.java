@@ -7,6 +7,9 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 @Entity
 @Data
 public class Utente {

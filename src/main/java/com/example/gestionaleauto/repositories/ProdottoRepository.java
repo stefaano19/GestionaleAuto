@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ *
+ */
 @Repository
 public interface ProdottoRepository extends JpaRepository<Prodotto, Integer> {
     List<Prodotto> findAll();
@@ -15,7 +18,7 @@ public interface ProdottoRepository extends JpaRepository<Prodotto, Integer> {
     List<Prodotto> findAllByNomeContainingOrderByNomeAscNomeAsc(String nome);
     List<Prodotto> findAllByTipologiaIsOrderByTipologiaAscNomeAsc(TipologiaProdotto tipologiaProdotto);
     List<Prodotto> findAllByPrezzoIsLessThanOrderByPrezzoAscNomeAsc(double prezzo);
-    List<Prodotto> findAllByDisponibilitàIsLessThanOrderByDisponibilitàAscNomeAsc(int disponibilità);
+    List<Prodotto> findAllByDisponibilitaIsLessThanOrderByDisponibilitaAscNomeAsc(int disponibilita);
     List<Prodotto> findProdottoByFornitore_Id(int id);
 
     List<Prodotto> findAllByTipologiaIs(TipologiaProdotto tipologiaProdotto);

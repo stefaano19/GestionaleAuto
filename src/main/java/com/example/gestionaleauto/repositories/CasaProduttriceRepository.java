@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ *
+ */
 @Repository
 public interface CasaProduttriceRepository extends JpaRepository<CasaProduttrice,Integer> {
     List<CasaProduttrice> findAll();

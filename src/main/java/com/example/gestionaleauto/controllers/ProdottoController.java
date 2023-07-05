@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ *
+ */
 @RestController
 @RequestMapping("/prodotti")
 public class ProdottoController {
@@ -37,8 +40,8 @@ public class ProdottoController {
 
     @GetMapping("/mostraProdottiPerDisponibilità")
     @PreAuthorize("hasRole('dipendente')")
-    public ResponseEntity mostraProdottiPerDisponibilità() {
-        return new ResponseEntity(gestioneProdotto.mostraProdottiPerDisponibilità(), HttpStatus.OK);
+    public ResponseEntity mostraProdottiPerDisponibilita() {
+        return new ResponseEntity(gestioneProdotto.mostraProdottiPerDisponibilita(), HttpStatus.OK);
     }
 
     @GetMapping("/mostraProdottiDaOrdinare")

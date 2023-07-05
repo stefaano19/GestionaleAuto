@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ *
+ */
 @Repository
 public interface FornitoreRepository extends JpaRepository<Fornitore, Integer> {
     List<Fornitore> findAllByRagioneSocialeContainingOrderByRagioneSocialeAsc(String ragioneSociale);

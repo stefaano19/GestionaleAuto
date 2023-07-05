@@ -15,6 +15,9 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *
+ */
 @Service
 public class GestioneAuto {
 
@@ -48,7 +51,7 @@ public class GestioneAuto {
         return autoRepository.findAllByPrezzoIsLessThanOrderByPrezzoAscModelloAsc(PREZZO_MAX);
     }
     @Transactional(readOnly = true)
-    public List<Auto> mostraAutoPerDisponibilità(){
+    public List<Auto> mostraAutoPerDisponibilita(){
 
         return autoRepository.findAllByQuantitaIsLessThanOrderByQuantitaAsc(QUANTITA_MAX);
     }

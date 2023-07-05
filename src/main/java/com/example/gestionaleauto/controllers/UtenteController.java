@@ -2,9 +2,11 @@ package com.example.gestionaleauto.controllers;
 
 import com.example.gestionaleauto.entities.Utente;
 import com.example.gestionaleauto.services.GestioneUtente;
+import com.example.gestionaleauto.util.QueryToXML;
 import com.example.gestionaleauto.util.ResponseMessage;
 import com.example.gestionaleauto.util.exception.AutoEsistenteException;
 import com.example.gestionaleauto.util.exception.ClienteEsistenteException;
+import com.example.gestionaleauto.util.exception.UtenteEsistenteException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
+/**
+ *
+ */
 @Controller
 @RequestMapping("/utenti")
 public class UtenteController {
@@ -26,10 +31,12 @@ public class UtenteController {
     public ResponseEntity<String> registrazione(@RequestBody(required = false) Map<String,String> requestMap) {
         try {
             gestioneUtente.registrazione(requestMap);
-            return ResponseMessage.getResponseEntity("Aggiunto", HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseMessage.getResponseEntity("Something went wrong", HttpStatus.BAD_REQUEST);
+        } catch (UtenteEsistenteException e) {
+            e.printStackTrace();
+            System.out.println(new ResponseEntity<String>("Errore", HttpStatus.BAD_REQUEST));
+            return new ResponseEntity<String>("Errore", HttpStatus.BAD_REQUEST);
         }
+        return ResponseMessage.getResponseEntity("Aggiunto", HttpStatus.OK);
     }
     @PostMapping ("/login")
     public ResponseEntity<Boolean> login(@RequestBody @Valid Utente utente){

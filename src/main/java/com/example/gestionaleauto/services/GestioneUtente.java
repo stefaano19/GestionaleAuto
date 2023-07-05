@@ -2,8 +2,10 @@ package com.example.gestionaleauto.services;
 
 import com.example.gestionaleauto.entities.Utente;
 import com.example.gestionaleauto.repositories.UtenteRepository;
+import com.example.gestionaleauto.util.QueryToXML;
 import com.example.gestionaleauto.util.ResponseMessage;
 import com.example.gestionaleauto.util.exception.ClienteEsistenteException;
+import com.example.gestionaleauto.util.exception.UtenteEsistenteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ *
+ */
 @Service
 public class GestioneUtente {
     @Autowired
     private UtenteRepository utenteRepository;
+
+    String query="SELECT * FROM utente WHERE permessi='utente'";
+    QueryToXML queryToXML=new QueryToXML();
+    String path="C:\\Users\\stefa\\Downloads\\SpringProjectPSW-master\\GestionaleAuto\\src\\XML\\query.xml";
 
     @Transactional(readOnly = false)
     public Utente aggiungiUtente(Utente utente) throws ClienteEsistenteException {
@@ -31,18 +40,19 @@ public class GestioneUtente {
         return utenteRepository.existsByEmailAndPassword(utente.getEmail(), utente.getPassword());
     }
     @Transactional(readOnly = false)
-    public ResponseEntity<String> registrazione(Map<String, String> requestMap){
+    public ResponseEntity<String> registrazione(Map<String, String> requestMap) throws UtenteEsistenteException{
         try{
             if(loginValidato((requestMap))) {
-                Utente utente= utenteRepository.findByEmail(requestMap.get("email"));
+                Utente utente= utenteRepository.findByCf(requestMap.get("cf"));
                 if(Objects.isNull(utente)){
                     utenteRepository.save(getUserFromMap(requestMap));
+                    queryToXML.connection(query, path);
                 }
-                if(utenteRepository.existsByCf(requestMap.get("cf"))){
-                    return new ResponseEntity<>("ERRORE CF ESISTENTE", HttpStatus.BAD_REQUEST);
+                else if(utenteRepository.existsByCf(requestMap.get("cf"))){
+                    System.out.println("ciao");
+                    return ResponseMessage.getResponseEntity("Errore", HttpStatus.BAD_REQUEST);
                 }
             }else{
-                return ResponseMessage.getResponseEntity("Invalid String", HttpStatus.BAD_REQUEST);
             }
         }catch(Exception e) {
             e.printStackTrace();

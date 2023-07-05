@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.util.Collection;
 
+/**
+ *
+ */
 @Entity
 @Data
 public class Prodotto {
@@ -30,7 +33,7 @@ public class Prodotto {
 
     @Basic
     @Column(name="disponibilità", nullable = false)
-    private int disponibilità;
+    private int disponibilita;
 
     @ManyToOne
     @JoinColumn(name="FORNITORE_ID")

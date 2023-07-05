@@ -11,6 +11,9 @@ import lombok.Data;
 import java.util.Collection;
 import java.util.Enumeration;
 
+/**
+ *
+ */
 @Entity
 @Data
 public class Auto {

@@ -13,6 +13,9 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *
+ */
 @Service
 public class GestioneProdotto {
 
@@ -50,8 +53,8 @@ public class GestioneProdotto {
         return prodottoRepository.findAllByPrezzoIsLessThanOrderByPrezzoAscNomeAsc(PREZZO_MAX);
     }
     @Transactional(readOnly = true)
-    public List<Prodotto> mostraProdottiPerDisponibilità(){
-        return prodottoRepository.findAllByDisponibilitàIsLessThanOrderByDisponibilitàAscNomeAsc(DISPONIBILITA_MAX);
+    public List<Prodotto> mostraProdottiPerDisponibilita(){
+        return prodottoRepository.findAllByDisponibilitaIsLessThanOrderByDisponibilitaAscNomeAsc(DISPONIBILITA_MAX);
     }
 
 
@@ -96,7 +99,7 @@ public class GestioneProdotto {
     }
     @Transactional(readOnly = false)
     public List<Prodotto> mostraProdottiDaOrdinare() {
-        return prodottoRepository.findAllByDisponibilitàIsLessThanOrderByDisponibilitàAscNomeAsc(DISPONIBILITA_MIN);
+        return prodottoRepository.findAllByDisponibilitaIsLessThanOrderByDisponibilitaAscNomeAsc(DISPONIBILITA_MIN);
     }
 
 }
