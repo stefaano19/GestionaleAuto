@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  *
  */
@@ -46,21 +48,21 @@ public class ProdottoController {
 
     @GetMapping("/mostraProdottiDaOrdinare")
     @PreAuthorize("hasRole('dipendente')")
-    public ResponseEntity mostraProdottiDaAcquistare() {
-        return new ResponseEntity(gestioneProdotto.mostraProdottiDaOrdinare(), HttpStatus.OK);
+    public List<Prodotto> mostraProdottiDaAcquistare() {
+        return gestioneProdotto.mostraProdottiDaOrdinare();
     }
 
     @PostMapping("/creaProdotto")
     @PreAuthorize("hasRole('dipendente')")
     public ResponseEntity creaProdotto(@RequestBody @Valid Prodotto prodotto) {
         try {
+            System.out.println(prodotto);
             gestioneProdotto.creaProdotto(prodotto);
         } catch (Exception e) {
             return new ResponseEntity(new ResponseMessage("PRODOTTO ESISTENTE"), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(new ResponseMessage("CREATO"), HttpStatus.OK);
     }
-
     @PostMapping("/aggiornaProdotto")
     @PreAuthorize("hasRole('dipendente')")
     public ResponseEntity aggiornaProdotto(@RequestBody @Valid String nome, @RequestBody @Valid double prezzo) {

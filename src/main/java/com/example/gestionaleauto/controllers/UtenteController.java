@@ -29,14 +29,14 @@ public class UtenteController {
     GestioneUtente gestioneUtente;
     @PostMapping ("/registrazione")
     public ResponseEntity<String> registrazione(@RequestBody(required = false) Map<String,String> requestMap) {
+        String messaggio = new String();
         try {
-            gestioneUtente.registrazione(requestMap);
+            messaggio  = gestioneUtente.registrazione(requestMap);
         } catch (UtenteEsistenteException e) {
             e.printStackTrace();
-            System.out.println(new ResponseEntity<String>("Errore", HttpStatus.BAD_REQUEST));
-            return new ResponseEntity<String>("Errore", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("messag:"+messaggio, HttpStatus.BAD_REQUEST);
         }
-        return ResponseMessage.getResponseEntity("Aggiunto", HttpStatus.OK);
+        return ResponseMessage.getResponseEntity(messaggio, HttpStatus.OK);
     }
     @PostMapping ("/login")
     public ResponseEntity<Boolean> login(@RequestBody @Valid Utente utente){

@@ -40,33 +40,34 @@ public class GestioneOrdine {
     private EntityManager entityManager;
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public OrdineAcquisto creaOrdineAuto(String partitaIva, List<Auto> auto){
-        CasaProduttrice casaProduttrice=casaProduttriceRepository.findByPartitaIvaContainingIgnoreCase(partitaIva);
-        OrdineAcquisto ordineAcquisto=new OrdineAcquisto();
-        ordineAcquisto.setDataOrdine(new Date(System.currentTimeMillis()));
-        ordineAcquisto.setCasaProduttrice(casaProduttrice);
+    public OrdineAcquisto creaOrdineAuto(OrdineAcquisto ordineAcquisto){
+        for( Auto a: ordineAcquisto.getAuto()){
+        }
+        System.out.println(ordineAcquisto);
+        OrdineAcquisto o=new OrdineAcquisto();
+        o.setDataOrdine(ordineAcquisto.getDataOrdine());
+        o.setConforme(ordineAcquisto.isConforme());
+        Optional<CasaProduttrice> casaProduttrice=casaProduttriceRepository.findById(ordineAcquisto.getCp_C());
+        o.setCasaProduttrice(casaProduttrice.get());
+        System.out.println(ordineAcquisto);
+        ordineAcquistoRepository.save(o);
+        for(Auto a: ordineAcquisto.getAuto()){
+            Optional<Auto> acquistate= autoRepository.findById(a.getId());
+            Auto acquistata= acquistate.get();
+            acquistata.setQuantita(acquistata.getQuantita()+1);
+            autoRepository.save(acquistata);
+        }
         List<Auto> acquistate = new ArrayList<>();
-        for(Auto a: auto){
-            Optional<Auto> acquistata = autoRepository.findById(a.getId());
-            if(acquistata.isEmpty()){
-                acquistata.get().setQuantita(acquistata.get().getQuantita()+ a.getQuantita());
-                ordineAcquisto.setImporto(ordineAcquisto.getImporto()+acquistata.get().getPrezzo());
-                acquistate.add(a);
-            }else{
-                autoRepository.save(a);
-            }
+        for(Auto a: ordineAcquisto.getAuto()){
+            Optional<Auto> acquistata= autoRepository.findById(a.getId());
+            acquistate.add(acquistata.get());
+            o.setImporto(o.getImporto()+acquistata.get().getPrezzo());
+            System.out.println("siu");
         }
-        ordineAcquisto.setAuto(acquistate);
-        entityManager.refresh(ordineAcquisto);
-        for(Auto a: auto){
-            Collection<OrdineAcquisto> ordiniAcquisto= a.getOrdiniAcquisto();
-            ordiniAcquisto.add(ordineAcquisto);
-            a.setOrdiniAcquisto(ordiniAcquisto);
-            autoRepository.save(a);
-        }
-        ordineAcquistoRepository.save(ordineAcquisto);
+        o.setAuto(acquistate);
+        System.out.println("Ciao"+o);
+        ordineAcquistoRepository.save(o);
         return ordineAcquisto;
-
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -107,31 +108,33 @@ public class GestioneOrdine {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public OrdineAcquisto creaOrdineProdotto(String partitaIva, List<Prodotto> prodotto){
-        Fornitore fornitore=fornitoreRepository.findByPartitaIvaContainingIgnoreCase(partitaIva);
-        OrdineAcquisto ordineAcquisto=new OrdineAcquisto();
-        ordineAcquisto.setDataOrdine(new Date(System.currentTimeMillis()));
-        ordineAcquisto.setFornitore(fornitore);
-        List<Prodotto> acquistati = new ArrayList<>();
-        for(Prodotto p: prodotto){
-            Optional<Prodotto> acquistato = prodottoRepository.findById(p.getId());
-            if(acquistato.isEmpty()){
-                acquistato.get().setDisponibilita(acquistato.get().getDisponibilita()+ p.getDisponibilita());
-                ordineAcquisto.setImporto(ordineAcquisto.getImporto()+acquistato.get().getPrezzo());
-                acquistati.add(p);
-            }else{
-                prodottoRepository.save(p);
-            }
+    public OrdineAcquisto creaOrdineProdotto(OrdineAcquisto ordineAcquisto){
+        for( Prodotto p: ordineAcquisto.getProdotto()){
         }
-        ordineAcquisto.setProdotto(acquistati);
-        entityManager.refresh(ordineAcquisto);
-        for(Prodotto p: prodotto){
-            Collection<OrdineAcquisto> ordiniAcquisto= p.getOrdiniAcquisto();
-            ordiniAcquisto.add(ordineAcquisto);
-            p.setOrdiniAcquisto(ordiniAcquisto);
-            prodottoRepository.save(p);
+        System.out.println(ordineAcquisto);
+        OrdineAcquisto o=new OrdineAcquisto();
+        o.setDataOrdine(ordineAcquisto.getDataOrdine());
+        o.setConforme(ordineAcquisto.isConforme());
+        Optional<Fornitore> fornitore=fornitoreRepository.findById(ordineAcquisto.getCp_F());
+        o.setFornitore(fornitore.get());
+        System.out.println(ordineAcquisto);
+        ordineAcquistoRepository.save(o);
+        for(Prodotto p: ordineAcquisto.getProdotto()){
+            Optional<Prodotto> acquistate= prodottoRepository.findById(p.getId());
+            Prodotto acquistata= acquistate.get();
+            acquistata.setDisponibilita(acquistata.getDisponibilita()+1);
+            prodottoRepository.save(acquistata);
         }
-        ordineAcquistoRepository.save(ordineAcquisto);
+        List<Prodotto> acquistate = new ArrayList<>();
+        for(Prodotto p: ordineAcquisto.getProdotto()){
+            Optional<Prodotto> acquistata= prodottoRepository.findById(p.getId());
+            acquistate.add(acquistata.get());
+            o.setImporto(o.getImporto()+acquistata.get().getPrezzo());
+            System.out.println("siu");
+        }
+        o.setProdotto(acquistate);
+        System.out.println("Ciao"+o);
+        ordineAcquistoRepository.save(o);
         return ordineAcquisto;
     }
 
@@ -204,7 +207,11 @@ public class GestioneOrdine {
         return ordineVenditaRepository.findAll();
     }
 
-    public List<OrdineAcquisto> ordiniAcquisto() {
-        return ordineAcquistoRepository.findAll();
+    public List<OrdineAcquisto> ordiniAcquistoProdotti() {
+        return ordineAcquistoRepository.findDistinctByCasaProduttriceIsNull();
+    }
+
+    public List<OrdineAcquisto> ordiniAcquistoAuto() {
+        return ordineAcquistoRepository.findDistinctByFornitoreIsNull();
     }
 }

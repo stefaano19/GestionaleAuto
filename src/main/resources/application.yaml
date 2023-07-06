@@ -1,4 +1,11 @@
 spring:
+  spring:
+    jpa:
+      properties:
+        hibernate:
+          event:
+            merge:
+              entity_copy_observer=allow:
   application:
     name: GestionaleAuto
   datasource:

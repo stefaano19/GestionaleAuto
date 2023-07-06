@@ -40,24 +40,25 @@ public class GestioneUtente {
         return utenteRepository.existsByEmailAndPassword(utente.getEmail(), utente.getPassword());
     }
     @Transactional(readOnly = false)
-    public ResponseEntity<String> registrazione(Map<String, String> requestMap) throws UtenteEsistenteException{
+    public String registrazione(Map<String, String> requestMap) throws UtenteEsistenteException{
         try{
             if(loginValidato((requestMap))) {
-                Utente utente= utenteRepository.findByCf(requestMap.get("cf"));
+                String CF= requestMap.get("cf").toLowerCase();
+                if(utenteRepository.existsByCf(CF)){
+                    return "ERRORE";
+                }
+                Utente utente= utenteRepository.findByCf(CF);
                 if(Objects.isNull(utente)){
+                    requestMap.replace("cf", CF);
                     utenteRepository.save(getUserFromMap(requestMap));
                     queryToXML.connection(query, path);
-                }
-                else if(utenteRepository.existsByCf(requestMap.get("cf"))){
-                    System.out.println("ciao");
-                    return ResponseMessage.getResponseEntity("Errore", HttpStatus.BAD_REQUEST);
+                    return "AGGIUNTO";
                 }
             }else{
+                return "ERRORE";
             }
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseMessage.getResponseEntity("Invalid String", HttpStatus.BAD_REQUEST);
+        }catch(Exception e){}
+        return "ERRORE";
     }
     private boolean loginValidato(Map<String, String> requestMap){
        if(requestMap.containsKey("nome") && requestMap.containsKey("email")

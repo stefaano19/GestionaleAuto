@@ -80,4 +80,34 @@
         <password>Stefano01.</password>
         <status>false</status>
     </result>
+    <result>
+        <id>41</id>
+        <cf>brsssn01p19d086x</cf>
+        <cognome/>
+        <email>stefanobru01@libero.it</email>
+        <nome>Ste</nome>
+        <permessi>utente</permessi>
+        <password>Stefano01.</password>
+        <status>false</status>
+    </result>
+    <result>
+        <id>42</id>
+        <cf>brssfn01p19d086x</cf>
+        <cognome/>
+        <email>stefano01@libero.it</email>
+        <nome>Ste</nome>
+        <permessi>utente</permessi>
+        <password>STE</password>
+        <status>false</status>
+    </result>
+    <result>
+        <id>43</id>
+        <cf>jvhfmn53p25h502y</cf>
+        <cognome/>
+        <email>Stefanobru01@libero.ti</email>
+        <nome>hdjsd</nome>
+        <permessi>utente</permessi>
+        <password>jasbdj</password>
+        <status>false</status>
+    </result>
 </results>

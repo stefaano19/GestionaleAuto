@@ -1,5 +1,6 @@
 package com.example.gestionaleauto.repositories;
 
+import com.example.gestionaleauto.entities.Auto;
 import com.example.gestionaleauto.entities.Prodotto;
 import com.example.gestionaleauto.util.TipologiaProdotto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +21,7 @@ public interface ProdottoRepository extends JpaRepository<Prodotto, Integer> {
     List<Prodotto> findAllByPrezzoIsLessThanOrderByPrezzoAscNomeAsc(double prezzo);
     List<Prodotto> findAllByDisponibilitaIsLessThanOrderByDisponibilitaAscNomeAsc(int disponibilita);
     List<Prodotto> findProdottoByFornitore_Id(int id);
+    List<Prodotto> findAllByDisponibilitaIsLessThan(int disponibilita);
 
     List<Prodotto> findAllByTipologiaIs(TipologiaProdotto tipologiaProdotto);
 }

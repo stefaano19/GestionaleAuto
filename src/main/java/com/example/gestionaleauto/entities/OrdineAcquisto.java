@@ -1,10 +1,12 @@
 package com.example.gestionaleauto.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -22,6 +24,7 @@ public class OrdineAcquisto {
 
     @Basic
     @Column(name = "data_ordine", nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private Date dataOrdine;
 
     @Basic
@@ -37,8 +40,13 @@ public class OrdineAcquisto {
     @ManyToOne
     @JoinColumn(name="DIPENDENTE_ID")
     private Dipendente dipendente;
-    @ManyToMany(mappedBy ="ordiniAcquisto")
+    @ManyToMany(mappedBy ="ordiniAcquisto", cascade = CascadeType.MERGE)
     public Collection<Auto> auto;
     @ManyToMany(mappedBy ="ordiniAcquisto")
     public Collection<Prodotto> prodotto;
+    @Column(nullable = true)
+    private int cp_C;
+    @Column(nullable = true)
+    private int cp_F;
+
 }

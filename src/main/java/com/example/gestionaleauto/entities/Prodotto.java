@@ -29,7 +29,7 @@ public class Prodotto {
     private String nome;
 
     @Basic
-    private TipologiaProdotto tipologia;
+    private String tipologia;
 
     @Basic
     @Column(name="disponibilità", nullable = false)
@@ -39,6 +39,7 @@ public class Prodotto {
     @JoinColumn(name="FORNITORE_ID")
     private Fornitore fornitore;
 
+    private int CP_F;
     @ManyToMany
     @JoinTable(name="COINVOLGE", joinColumns = {@JoinColumn(name = "PRODOTTO_ID")}, inverseJoinColumns = {@JoinColumn(name = "ORDINEACQUISTO_ID")})
     private Collection<OrdineAcquisto> ordiniAcquisto;

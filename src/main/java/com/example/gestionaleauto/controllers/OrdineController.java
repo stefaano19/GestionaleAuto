@@ -4,6 +4,7 @@ import com.example.gestionaleauto.entities.*;
 import com.example.gestionaleauto.services.GestioneOrdine;
 import com.example.gestionaleauto.util.Pagamento;
 import com.example.gestionaleauto.util.ResponseMessage;
+import com.example.gestionaleauto.util.exception.AutoEsistenteException;
 import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,16 @@ public class OrdineController {
     public ResponseEntity mostraOrdiniVendita() {
         return new ResponseEntity(gestioneOrdine.ordiniVendita(), HttpStatus.OK);
     }
-    @GetMapping("/acquisto")
-    public ResponseEntity mostraOrdiniAcquisto() {
-        return new ResponseEntity(gestioneOrdine.ordiniAcquisto(), HttpStatus.OK);
+    @GetMapping("/acquistoProdotti")
+    public List<OrdineAcquisto> mostraOrdiniAcquistoProdotti() {
+        System.out.println(gestioneOrdine.ordiniAcquistoProdotti());
+        return gestioneOrdine.ordiniAcquistoProdotti();
+    }
+
+    @GetMapping
+    public List<OrdineAcquisto> mostraOrdiniAcquistoAuto() {
+        System.out.println(gestioneOrdine.ordiniAcquistoAuto());
+        return gestioneOrdine.ordiniAcquistoAuto();
     }
 
     @GetMapping("/mostraPraticheVendita")
@@ -75,25 +83,16 @@ public class OrdineController {
     }
 
     @PostMapping("/creaOrdineAcquisto/Auto")
-    public ResponseEntity creaOrdineAcquistoAuto(@RequestBody @Valid String partitaIva, @RequestBody @Valid List<Auto> auto) {
-        try {
-            gestioneOrdine.creaOrdineAuto(partitaIva,auto);
-        } catch (Exception e) {
-            return new ResponseEntity(new ResponseMessage("ORDINE ESISTENTE"), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity creaOrdineAcquistoAuto(@RequestBody @Valid OrdineAcquisto ordineAcquisto) {
+        gestioneOrdine.creaOrdineAuto(ordineAcquisto);
         return new ResponseEntity<>(new ResponseMessage("CREATO"), HttpStatus.OK);
     }
 
     @PostMapping("/creaOrdineAcquisto/Prodotto")
-    public ResponseEntity creaOrdineAcquistoProdotto(@RequestBody @Valid String partitaIva, @RequestBody @Valid List<Prodotto> prodotto) {
-        try {
-            gestioneOrdine.creaOrdineProdotto(partitaIva, prodotto);
-        } catch (Exception e) {
-            return new ResponseEntity(new ResponseMessage("ORDINE ESISTENTE"), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity creaOrdineAcquistoProdotto(@RequestBody @Valid OrdineAcquisto ordineAcquisto) {
+        gestioneOrdine.creaOrdineProdotto(ordineAcquisto);
         return new ResponseEntity<>(new ResponseMessage("CREATO"), HttpStatus.OK);
     }
-
     @PostMapping("/creaOrdineVendita/Preventivo")
     public ResponseEntity creaOrdineDaPreventivo(@RequestBody @Valid Preventivo preventivo) {
         try {

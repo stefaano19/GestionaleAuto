@@ -1,7 +1,12 @@
 package com.example.gestionaleauto.services;
 
+import com.example.gestionaleauto.entities.Auto;
+import com.example.gestionaleauto.entities.CasaProduttrice;
+import com.example.gestionaleauto.entities.Fornitore;
 import com.example.gestionaleauto.entities.Prodotto;
+import com.example.gestionaleauto.repositories.FornitoreRepository;
 import com.example.gestionaleauto.repositories.ProdottoRepository;
+import com.example.gestionaleauto.util.exception.AutoEsistenteException;
 import com.example.gestionaleauto.util.exception.ProdottoEsistenteException;
 import com.example.gestionaleauto.util.exception.ProdottoNonEsistenteException;
 import com.example.gestionaleauto.util.TipologiaProdotto;
@@ -21,6 +26,8 @@ public class GestioneProdotto {
 
     @Autowired
     private ProdottoRepository prodottoRepository;
+    @Autowired
+    private FornitoreRepository fornitoreRepository;
 
     private EntityManager entityManager;
 
@@ -30,11 +37,15 @@ public class GestioneProdotto {
     final int DISPONIBILITA_MIN=1;
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public Prodotto creaProdotto(Prodotto prodotto) throws ProdottoEsistenteException {
-        if(prodotto.getId()!=-1 && prodottoRepository.existsById(prodotto.getId())) {
-            throw new ProdottoEsistenteException();
+    public Prodotto creaProdotto(Prodotto prodotto) throws AutoEsistenteException {
+        Fornitore f=null;
+        Optional<Fornitore> fornitore=fornitoreRepository.findById(prodotto.getCP_F());
+        if(fornitore.isPresent()){
+            f=fornitore.get();
+            System.out.println(f);
         }
-        prodotto.setNome(prodotto.getNome()+SPAZIO);
+        prodotto.setFornitore(f);
+        System.out.println(""+prodotto.toString());
         return prodottoRepository.save(prodotto);
     }
 
@@ -54,7 +65,7 @@ public class GestioneProdotto {
     }
     @Transactional(readOnly = true)
     public List<Prodotto> mostraProdottiPerDisponibilita(){
-        return prodottoRepository.findAllByDisponibilitaIsLessThanOrderByDisponibilitaAscNomeAsc(DISPONIBILITA_MAX);
+        return prodottoRepository.findAllByDisponibilitaIsLessThan(DISPONIBILITA_MIN);
     }
 
 
